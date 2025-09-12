@@ -23,6 +23,7 @@ class Turnstile {
             passesDenied++;
             return false;
         }
+
         if (card.canPass()) {
             card.useTrip();
             passesAllowed++;
@@ -45,6 +46,7 @@ class Turnstile {
         for (String type : passesByType.keySet()) {
             System.out.println(type + ": " + passesByType.get(type));
         }
+
         System.out.println("Rejections by type:");
         for (String type : deniedByType.keySet()) {
             System.out.println(type + ": " + deniedByType.get(type));

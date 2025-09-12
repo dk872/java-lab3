@@ -12,6 +12,7 @@ class SystemRegistry {
         String id = "C" + (idCounter++);
         Card card = new TripsCard(id, type, validityTerm, trips, validFrom);
         cards.put(id, card);
+
         return card;
     }
 
@@ -19,6 +20,7 @@ class SystemRegistry {
         String id = "C" + (idCounter++);
         AccumulatedCard card = new AccumulatedCard(id, initialBalance, turnstile.getTripCost());
         cards.put(id, card);
+
         return card;
     }
 

@@ -49,12 +49,12 @@ class Card {
     public String getType() { return type; }
 
     public boolean isValid() {
+        LocalDate now = LocalDate.now();
+        LocalDate expiryDate;
+
         if (validityTerm.equals("unlimited")) {
             return true;
         }
-
-        LocalDate now = LocalDate.now();
-        LocalDate expiryDate;
 
         switch (validityTerm) {
             case "month":
@@ -72,6 +72,7 @@ class Card {
 
     public boolean canPass() {
         if (!isValid()) return false;
+
         if (isAccumulated) {
             return false;
         } else {
@@ -94,6 +95,7 @@ class Card {
             return false;
         }
         trips += count;
+
         return true;
     }
 }
