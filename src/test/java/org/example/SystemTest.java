@@ -1,0 +1,177 @@
+package org.example;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
+import static org.junit.jupiter.api.Assertions.*;
+
+class SystemTest {
+    private SystemRegistry registry;
+    private Turnstile turnstile;
+
+    @BeforeEach
+    void setup() {
+        turnstile = new Turnstile(10.0);
+        registry = new SystemRegistry();
+    }
+
+    @Test
+    void validTripsCardPasses() {
+        Card card = registry.issueTripsCard("student", "10 days", 5, LocalDate.now());
+        assertTrue(turnstile.payTrip(card));
+    }
+
+    @Test
+    void expiredTripsCardFails() {
+        LocalDate today = LocalDate.now();
+
+        Card card = registry.issueTripsCard("pupil", "10 days", 5, today.minusDays(15));
+        assertFalse(turnstile.payTrip(card));
+    }
+
+    @Test
+    void noTripsFails() {
+        Card card = registry.issueTripsCard("regular", "month", 0, LocalDate.now());
+        assertFalse(turnstile.payTrip(card));
+    }
+
+    @Test
+    void tripsDecreaseAfterPass() {
+        Card card = registry.issueTripsCard("student", "month", 3, LocalDate.now());
+        assertTrue(turnstile.payTrip(card));
+        assertTrue(turnstile.payTrip(card));
+        assertTrue(turnstile.payTrip(card));
+        assertFalse(turnstile.payTrip(card));
+    }
+
+    @Test
+    void addTripsIncreasesCount() {
+        Card card = registry.issueTripsCard("regular", "month", 1, LocalDate.now());
+        assertTrue(card.addTrips(2));
+        assertEquals(3, card.trips);
+    }
+
+    @Test
+    void validOnLastDay() {
+        LocalDate issued = LocalDate.now().minusDays(10);
+        Card card = registry.issueTripsCard("student", "10 days", 5, issued);
+        assertTrue(card.isValid());
+        assertTrue(turnstile.payTrip(card));
+    }
+
+    @Test
+    void invalidAfterLastDay() {
+        LocalDate issued = LocalDate.now().minusDays(11);
+        Card card = registry.issueTripsCard("student", "10 days", 5, issued);
+        assertFalse(card.isValid());
+        assertFalse(turnstile.payTrip(card));
+    }
+
+    @Test
+    void validOneMonth() {
+        LocalDate issued = LocalDate.now().minusMonths(1);
+        Card card = registry.issueTripsCard("student", "month", 5, issued);
+        assertTrue(card.isValid());
+    }
+
+    @Test
+    void invalidAfterMonth() {
+        LocalDate issued = LocalDate.now().minusMonths(1).minusDays(1);
+        Card card = registry.issueTripsCard("student", "month", 5, issued);
+        assertFalse(card.isValid());
+    }
+
+    @Test
+    void addInvalidTripsFails() {
+        Card card = registry.issueTripsCard("regular", "month", 1, LocalDate.now());
+        assertFalse(card.addTrips(0));
+        assertFalse(card.addTrips(-5));
+    }
+
+    @Test
+    void getCardReturnsCorrect() {
+        Card card = registry.issueTripsCard("regular", "10 days", 3, LocalDate.now());
+        Card fetched = registry.getCard(card.getId());
+        assertNotNull(fetched);
+        assertEquals(card.getId(), fetched.getId());
+        assertEquals(card.getType(), fetched.getType());
+    }
+
+    @Test
+    void accumulatedCardPassesWithBalance() {
+        AccumulatedCard card = registry.issueAccumulatedCard(50, turnstile);
+        assertTrue(turnstile.payTrip(card));
+    }
+
+    @Test
+    void accumulatedCardFailsWithoutBalance() {
+        AccumulatedCard card = registry.issueAccumulatedCard(5, turnstile);
+        assertFalse(turnstile.payTrip(card));
+    }
+
+    @Test
+    void accumulatedCardDecreasesBalance() {
+        AccumulatedCard card = registry.issueAccumulatedCard(30, turnstile);
+        assertTrue(turnstile.payTrip(card));
+        assertEquals(20, card.getBalance(), 0.001);
+    }
+
+    @Test
+    void accumulatedCardCanBeToppedUp() {
+        AccumulatedCard card = registry.issueAccumulatedCard(5, turnstile);
+        card.addBalance(50);
+        assertEquals(55, card.getBalance(), 0.001);
+    }
+
+    @Test
+    void invalidCardTypeThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new TripsCard("C1", "VIP", "month", 5, LocalDate.now()));
+    }
+
+    @Test
+    void nonAccumulatedCannotBeUnlimited() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new TripsCard("C1", "student", "unlimited", 5, LocalDate.now()));
+    }
+
+    @Test
+    void negativeTripsThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new TripsCard("C1", "regular", "month", -10, LocalDate.now()));
+    }
+
+    @Test
+    void countsPassesAndDenials() {
+        LocalDate today = LocalDate.now();
+
+        Card ok = registry.issueTripsCard("student", "10 days", 1, today);
+        Card expired = registry.issueTripsCard("pupil", "10 days", 1, today.minusDays(20));
+
+        assertTrue(turnstile.payTrip(ok));
+        assertFalse(turnstile.payTrip(expired));
+    }
+
+    @Test
+    void tripsCardUnlimitedThrows() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new TripsCard("C2", "pupil", "unlimited", 3, LocalDate.now()));
+    }
+
+    @Test
+    void invalidValidityThrows() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new TripsCard("C3", "student", "year", 5, LocalDate.now()));
+    }
+
+    @Test
+    void invalidTypeThrows() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new TripsCard("C4", "gold", "month", 5, LocalDate.now()));
+    }
+
+    @Test
+    void nullCardDenied() {
+        assertFalse(turnstile.payTrip(null));
+    }
+}
