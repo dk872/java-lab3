@@ -12,7 +12,7 @@ public class Main {
         Turnstile turnstile = new Turnstile(tripCost);
 
         // Creating different cards
-        Card studentCard = registry.issueTripsCard("student", "month", 3, today);
+        Card studentCard = registry.issueTripsCard("student", "month", 5, today);
         Card pupilCard = registry.issueTripsCard("pupil", "10 days", 5,
                 today.minusDays(5));
         Card regularCard = registry.issueTripsCard("regular", "10 days", 10, today);
@@ -27,7 +27,9 @@ public class Main {
         // After several passes
         turnstile.payTrip(studentCard); // one more pass
         turnstile.payTrip(studentCard); // one more pass
-        System.out.println("Student card after 3 trips: " + turnstile.payTrip(studentCard)); // false (runs out of trips)
+        turnstile.payTrip(studentCard); // one more pass
+        turnstile.payTrip(studentCard); // one more pass
+        System.out.println("Student card after 5 trips: " + turnstile.payTrip(studentCard)); // false (runs out of trips)
 
         // Overdue card
         Card expiredPupilCard = registry.issueTripsCard("pupil", "10 days", 5,

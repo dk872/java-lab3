@@ -13,6 +13,7 @@ class Card {
 
     private static final Set<String> ALLOWED_TYPES = Set.of("student", "pupil", "regular");
     private static final Set<String> ALLOWED_VALIDITY_TERMS = Set.of("month", "10 days");
+    private static final Set<Integer> ALLOWED_COUNT_TRIPS = Set.of(5, 10);
 
     public Card(String id, String type, String validityTerm, int trips, boolean isAccumulated, LocalDate validFrom) {
         validateInputs(type, validityTerm, trips, isAccumulated);
@@ -34,11 +35,14 @@ class Card {
             if ("unlimited".equals(validityTerm)) {
                 throw new IllegalArgumentException("Non-accumulator cards cannot have validity term 'unlimited'");
             }
-
             if (!ALLOWED_VALIDITY_TERMS.contains(validityTerm)) {
-                throw new IllegalArgumentException("Invalid validity term \"" + validityTerm + "\" for card type: " + type);
+                throw new IllegalArgumentException("Invalid validity term \"" + validityTerm + "\" for card type:" +
+                        " " + type);
             }
-
+            if (!ALLOWED_COUNT_TRIPS.contains(trips)) {
+                throw new IllegalArgumentException("The number of trips can only be 5 or 10 when the card is issued, " +
+                        "got: " + trips);
+            }
             if (trips < 0) {
                 throw new IllegalArgumentException("The number of trips cannot be negative: " + trips);
             }
