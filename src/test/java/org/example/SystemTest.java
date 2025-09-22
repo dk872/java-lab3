@@ -3,6 +3,7 @@ package org.example;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SystemTest {
@@ -190,4 +191,38 @@ class SystemTest {
     void nullCardDenied() {
         assertFalse(turnstile.payTrip(null));
     }
+
+    @Test
+    void statisticsShouldCountPassesAndDenials() {
+        Card ok = registry.issueTripsCard("student", "10 days", 5, LocalDate.now());
+        Card expired = registry.issueTripsCard("pupil", "10 days", 5,
+                LocalDate.now().minusDays(20));
+
+        assertTrue(turnstile.payTrip(ok));
+        assertFalse(turnstile.payTrip(expired));
+
+        assertEquals(1, turnstile.getPassCount());
+        assertEquals(1, turnstile.getDenialCount());
+    }
+
+    @Test
+    void statisticsShouldCountByType() {
+        Card student = registry.issueTripsCard("student", "10 days", 5, LocalDate.now());
+        Card regular = registry.issueTripsCard("regular", "10 days", 5, LocalDate.now());
+        AccumulatedCard accumulated = registry.issueAccumulatedCard(5.0, turnstile);
+
+        turnstile.payTrip(student);
+        turnstile.payTrip(student);
+        turnstile.payTrip(regular);
+        turnstile.payTrip(accumulated);
+        turnstile.payTrip(accumulated);
+        turnstile.payTrip(accumulated);
+
+        Map<String, Integer> statsPasses = turnstile.getPassesByType();
+        Map<String, Integer> statsDenied = turnstile.getDeniedByType();
+        assertEquals(2, statsPasses.get("student"));
+        assertEquals(1, statsPasses.get("regular"));
+        assertEquals(3, statsDenied.get("regular"));
+    }
+
 }

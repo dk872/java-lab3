@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 class Turnstile {
     private int passesAllowed = 0;
@@ -16,6 +17,22 @@ class Turnstile {
 
     public double getTripCost() {
         return tripCost;
+    }
+
+    public int getPassCount() {
+        return passesAllowed;
+    }
+
+    public int getDenialCount() {
+        return passesDenied;
+    }
+
+    public Map<String, Integer> getPassesByType() {
+        return Collections.unmodifiableMap(passesByType);
+    }
+
+    public Map<String, Integer> getDeniedByType() {
+        return Collections.unmodifiableMap(deniedByType);
     }
 
     public boolean payTrip(Card card) {
