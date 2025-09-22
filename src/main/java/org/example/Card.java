@@ -52,10 +52,6 @@ class Card {
         LocalDate now = LocalDate.now();
         LocalDate expiryDate;
 
-        if (validityTerm.equals("unlimited")) {
-            return true;
-        }
-
         switch (validityTerm) {
             case "month":
                 expiryDate = validFrom.plusMonths(1);
