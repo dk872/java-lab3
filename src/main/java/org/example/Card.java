@@ -73,11 +73,7 @@ class Card {
     public boolean canPass() {
         if (!isValid()) return false;
 
-        if (isAccumulated) {
-            return false;
-        } else {
-            return trips > 0;
-        }
+        return trips > 0;
     }
 
     public void useTrip() {
