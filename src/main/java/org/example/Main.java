@@ -30,7 +30,8 @@ public class Main {
         System.out.println("Student card after 3 trips: " + turnstile.payTrip(studentCard)); // false (runs out of trips)
 
         // Overdue card
-        Card expiredPupilCard = registry.issueTripsCard("pupil", "10 days", 5, today.minusDays(15));
+        Card expiredPupilCard = registry.issueTripsCard("pupil", "10 days", 5,
+                today.minusDays(15));
         System.out.println("Expired pupil card pass: " + turnstile.payTrip(expiredPupilCard)); // false
 
         // Accumulated card
