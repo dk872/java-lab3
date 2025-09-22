@@ -13,7 +13,8 @@ public class Main {
 
         // Creating different cards
         Card studentCard = registry.issueTripsCard("student", "month", 3, today);
-        Card pupilCard = registry.issueTripsCard("pupil", "10 days", 5, today.minusDays(5));
+        Card pupilCard = registry.issueTripsCard("pupil", "10 days", 5,
+                today.minusDays(5));
         Card regularCard = registry.issueTripsCard("regular", "10 days", 10, today);
         AccumulatedCard accCard = registry.issueAccumulatedCard(50.0, turnstile);
 
