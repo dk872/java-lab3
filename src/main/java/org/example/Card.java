@@ -43,9 +43,6 @@ class Card {
                 throw new IllegalArgumentException("The number of trips can only be 5 or 10 when the card is issued, " +
                         "got: " + trips);
             }
-            if (trips < 0) {
-                throw new IllegalArgumentException("The number of trips cannot be negative: " + trips);
-            }
         }
     }
 
