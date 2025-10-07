@@ -11,6 +11,11 @@ class AccumulatedCard extends Card {
     }
 
     @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
     public boolean canPass() {
         return balance >= tripCost;
     }

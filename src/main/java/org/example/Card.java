@@ -3,7 +3,7 @@ package org.example;
 import java.time.LocalDate;
 import java.util.Set;
 
-class Card {
+abstract class Card {
     protected String id;
     protected String type;
     protected String validityTerm;
@@ -46,38 +46,6 @@ class Card {
         }
     }
 
-    public String getId() { return id; }
-    public String getType() { return type; }
-
-    public boolean isValid() {
-        LocalDate now = LocalDate.now();
-        LocalDate expiryDate;
-
-        switch (validityTerm) {
-            case "month":
-                expiryDate = validFrom.plusMonths(1);
-                break;
-            case "10 days":
-                expiryDate = validFrom.plusDays(10);
-                break;
-            default:
-                return false;
-        }
-
-        return !now.isAfter(expiryDate);
-    }
-
-    public boolean canPass() {
-        if (!isValid()) return false;
-
-        return trips > 0;
-    }
-
-    public void useTrip() {
-        if (!canPass()) return;
-        trips--;
-    }
-
     public boolean addTrips(int count) {
         if (isAccumulated) {
             System.out.println("Trip top-up is not available for prepaid cards!");
@@ -91,4 +59,11 @@ class Card {
 
         return true;
     }
+
+    public String getId() { return id; }
+    public String getType() { return type; }
+
+    public abstract boolean isValid();
+    public abstract boolean canPass();
+    public abstract void useTrip();
 }
