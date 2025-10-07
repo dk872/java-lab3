@@ -40,9 +40,6 @@ class TripsCard extends Card {
     }
 
     @Override
-    public int getCountOfTrips() { return trips; }
-
-    @Override
     public boolean canPass() {
         if (!isValid()) return false;
 
@@ -65,6 +62,9 @@ class TripsCard extends Card {
 
         return true;
     }
+
+    @Override
+    public int getCountOfTrips() { return trips; }
 
     private void validateInputs(String type, String validityTerm, int trips) {
         if ("unlimited".equals(validityTerm)) {

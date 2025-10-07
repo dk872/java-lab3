@@ -13,8 +13,8 @@ abstract class Card {
     public String getType() { return type; }
 
     public abstract boolean isValid();
-    public abstract int getCountOfTrips();
     public abstract boolean canPass();
     public abstract void useTrip();
     public abstract boolean addTrips(int count);
+    public abstract int getCountOfTrips();
 }

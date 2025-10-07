@@ -20,9 +20,6 @@ class AccumulatedCard extends Card {
     }
 
     @Override
-    public int getCountOfTrips() { return 0; }
-
-    @Override
     public boolean canPass() {
         return balance >= tripCost;
     }
@@ -39,11 +36,14 @@ class AccumulatedCard extends Card {
         return false;
     }
 
-    public void addBalance(double amount) {
-        balance += amount;
-    }
+    @Override
+    public int getCountOfTrips() { return 0; }
 
     public double getBalance() {
         return balance;
+    }
+
+    public void addBalance(double amount) {
+        balance += amount;
     }
 }
