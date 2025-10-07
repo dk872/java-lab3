@@ -1,10 +1,23 @@
 package org.example;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 class TripsCard extends Card {
+    private final String validityTerm;
+    private int trips;
+    private final LocalDate validFrom;
+
+    private static final Set<String> ALLOWED_VALIDITY_TERMS = Set.of("month", "10 days");
+    private static final Set<Integer> ALLOWED_COUNT_TRIPS = Set.of(5, 10);
+
     public TripsCard(String id, String type, String validityTerm, int trips, LocalDate validFrom) {
-        super(id, type, validityTerm, trips, false, validFrom);
+        super(id, type);
+
+        validateInputs(type, validityTerm, trips);
+        this.validityTerm = validityTerm;
+        this.trips = trips;
+        this.validFrom = validFrom;
     }
 
     @Override
@@ -27,6 +40,9 @@ class TripsCard extends Card {
     }
 
     @Override
+    public int getCountOfTrips() { return trips; }
+
+    @Override
     public boolean canPass() {
         if (!isValid()) return false;
 
@@ -37,5 +53,30 @@ class TripsCard extends Card {
     public void useTrip() {
         if (!canPass()) return;
         trips--;
+    }
+
+    @Override
+    public boolean addTrips(int count) {
+        if (count <= 0) {
+            System.out.println("The number of trips to add must be greater than 0!");
+            return false;
+        }
+        trips += count;
+
+        return true;
+    }
+
+    private void validateInputs(String type, String validityTerm, int trips) {
+        if ("unlimited".equals(validityTerm)) {
+            throw new IllegalArgumentException("Non-accumulator cards cannot have validity term 'unlimited'");
+        }
+        if (!ALLOWED_VALIDITY_TERMS.contains(validityTerm)) {
+            throw new IllegalArgumentException("Invalid validity term \"" + validityTerm + "\" for card type:" +
+                    " " + type);
+        }
+        if (!ALLOWED_COUNT_TRIPS.contains(trips)) {
+            throw new IllegalArgumentException("The number of trips can only be 5 or 10 when the card is issued, " +
+                    "got: " + trips);
+        }
     }
 }

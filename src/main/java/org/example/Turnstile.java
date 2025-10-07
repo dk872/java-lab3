@@ -12,6 +12,10 @@ class Turnstile {
     private final double tripCost;
 
     public Turnstile(double tripCost) {
+        if (tripCost < 0) {
+            throw new IllegalArgumentException("Trip cost cannot be negative.");
+        }
+
         this.tripCost = tripCost;
     }
 

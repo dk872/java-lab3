@@ -121,21 +121,27 @@ class SystemTest {
     }
 
     @Test
+    void negativeBalanceThrowsException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> registry.issueAccumulatedCard(-10.0, turnstile));
+    }
+
+    @Test
     void invalidCardTypeThrows() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TripsCard("C1", "VIP", "month", 5, LocalDate.now()));
+                () -> registry.issueTripsCard("VIP", "month", 5, LocalDate.now()));
     }
 
     @Test
     void nonAccumulatedCannotBeUnlimited() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TripsCard("C1", "student", "unlimited", 5, LocalDate.now()));
+                () -> registry.issueTripsCard("student", "unlimited", 5, LocalDate.now()));
     }
 
     @Test
     void negativeTripsThrows() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TripsCard("C1", "regular", "month", -10, LocalDate.now()));
+                () -> registry.issueTripsCard("regular", "month", -10, LocalDate.now()));
     }
 
     @Test
@@ -172,19 +178,13 @@ class SystemTest {
     @Test
     void tripsCardUnlimitedThrows() {
         assertThrows(IllegalArgumentException.class, () ->
-                new TripsCard("C2", "pupil", "unlimited", 3, LocalDate.now()));
+                registry.issueTripsCard("pupil", "unlimited", 3, LocalDate.now()));
     }
 
     @Test
     void invalidValidityThrows() {
         assertThrows(IllegalArgumentException.class, () ->
-                new TripsCard("C3", "student", "year", 5, LocalDate.now()));
-    }
-
-    @Test
-    void invalidTypeThrows() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new TripsCard("C4", "gold", "month", 5, LocalDate.now()));
+                registry.issueTripsCard("student", "year", 5, LocalDate.now()));
     }
 
     @Test
@@ -224,5 +224,4 @@ class SystemTest {
         assertEquals(1, statsPasses.get("regular"));
         assertEquals(3, statsDenied.get("regular"));
     }
-
 }

@@ -5,7 +5,11 @@ class AccumulatedCard extends Card {
     private final double tripCost;
 
     public AccumulatedCard(String id, double initialBalance, double tripCost) {
-        super(id, "regular", "unlimited", 0, true, null);
+        super(id, "regular");
+
+        if (initialBalance < 0) {
+            throw new IllegalArgumentException("Initial balance cannot be negative.");
+        }
         this.balance = initialBalance;
         this.tripCost = tripCost;
     }
@@ -16,6 +20,9 @@ class AccumulatedCard extends Card {
     }
 
     @Override
+    public int getCountOfTrips() { return 0; }
+
+    @Override
     public boolean canPass() {
         return balance >= tripCost;
     }
@@ -24,6 +31,12 @@ class AccumulatedCard extends Card {
     public void useTrip() {
         if (!canPass()) return;
         balance -= tripCost;
+    }
+
+    @Override
+    public boolean addTrips(int count) {
+        System.out.println("Trip top-up is not available for prepaid cards!");
+        return false;
     }
 
     public void addBalance(double amount) {

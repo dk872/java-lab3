@@ -10,9 +10,15 @@ class SystemRegistry {
 
     public Card issueTripsCard(String type, String validityTerm, int trips, LocalDate validFrom) {
         String id = "C" + (idCounter++);
-        Card card = new TripsCard(id, type, validityTerm, trips, validFrom);
-        cards.put(id, card);
 
+        Card card = switch (type) {
+            case "regular" -> new RegularCard(id, validityTerm, trips, validFrom);
+            case "student" -> new StudentCard(id, validityTerm, trips, validFrom);
+            case "pupil" -> new PupilCard(id, validityTerm, trips, validFrom);
+            default -> throw new IllegalArgumentException("Unknown card type: " + type);
+        };
+
+        cards.put(id, card);
         return card;
     }
 
