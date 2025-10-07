@@ -45,7 +45,7 @@ class SystemTest {
     void addTripsIncreasesCount() {
         Card card = registry.issueTripsCard("regular", "month", 5, LocalDate.now());
         assertTrue(card.addTrips(2));
-        assertEquals(7, card.trips);
+        assertEquals(7, card.getCountOfTrips());
     }
 
     @Test
@@ -142,14 +142,14 @@ class SystemTest {
     void tripsCardWithFiveTripsValid() {
         Card card = registry.issueTripsCard("student", "10 days", 5, LocalDate.now());
         assertNotNull(card);
-        assertEquals(5, card.trips);
+        assertEquals(5, card.getCountOfTrips());
     }
 
     @Test
     void tripsCardWithTenTripsValid() {
         Card card = registry.issueTripsCard("pupil", "10 days", 10, LocalDate.now());
         assertNotNull(card);
-        assertEquals(10, card.trips);
+        assertEquals(10, card.getCountOfTrips());
     }
 
     @Test

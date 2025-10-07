@@ -62,6 +62,7 @@ abstract class Card {
 
     public String getId() { return id; }
     public String getType() { return type; }
+    public int getCountOfTrips() { return trips; }
 
     public abstract boolean isValid();
     public abstract boolean canPass();
