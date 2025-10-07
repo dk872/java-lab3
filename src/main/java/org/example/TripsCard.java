@@ -65,9 +65,6 @@ class TripsCard extends Card {
     public int getCountOfTrips() { return trips; }
 
     private void validateInputs(String type, String validityTerm, int trips) {
-        if ("unlimited".equals(validityTerm)) {
-            throw new IllegalArgumentException("Non-accumulator cards cannot have validity term 'unlimited'");
-        }
         if (!ALLOWED_VALIDITY_TERMS.contains(validityTerm)) {
             throw new IllegalArgumentException("Invalid validity term \"" + validityTerm + "\" for card type:" +
                     " " + type);
