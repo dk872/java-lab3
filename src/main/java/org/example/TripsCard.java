@@ -46,9 +46,11 @@ class TripsCard extends Card {
 
     @Override
     public boolean useTrip(double tripCost) {
-        if (!canPass(tripCost)) return false;
-        trips--;
-        return true;
+        if (canPass(tripCost)) {
+            trips--;
+            return true;
+        }
+        return false;
     }
 
     @Override
