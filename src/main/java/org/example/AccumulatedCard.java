@@ -2,16 +2,14 @@ package org.example;
 
 class AccumulatedCard extends Card {
     private double balance;
-    private final double tripCost;
 
-    public AccumulatedCard(String id, double initialBalance, double tripCost) {
+    public AccumulatedCard(String id, double initialBalance) {
         super(id, "regular");
 
         if (initialBalance < 0) {
             throw new IllegalArgumentException("Initial balance cannot be negative.");
         }
         this.balance = initialBalance;
-        this.tripCost = tripCost;
     }
 
     @Override
@@ -20,13 +18,13 @@ class AccumulatedCard extends Card {
     }
 
     @Override
-    public boolean canPass() {
+    public boolean canPass(double tripCost) {
         return balance >= tripCost;
     }
 
     @Override
-    public void useTrip() {
-        if (!canPass()) return;
+    public void useTrip(double tripCost) {
+        if (!canPass(tripCost)) return;
         balance -= tripCost;
     }
 

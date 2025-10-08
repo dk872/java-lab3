@@ -45,8 +45,8 @@ class Turnstile {
             return false;
         }
 
-        if (card.canPass()) {
-            card.useTrip();
+        if (card.canPass(tripCost)) {
+            card.useTrip(tripCost);
             passesAllowed++;
             passesByType.put(card.getType(), passesByType.getOrDefault(card.getType(), 0) + 1);
             return true;

@@ -22,9 +22,9 @@ class SystemRegistry {
         return card;
     }
 
-    public AccumulatedCard issueAccumulatedCard(double initialBalance, Turnstile turnstile) {
+    public AccumulatedCard issueAccumulatedCard(double initialBalance) {
         String id = "C" + (idCounter++);
-        AccumulatedCard card = new AccumulatedCard(id, initialBalance, turnstile.getTripCost());
+        AccumulatedCard card = new AccumulatedCard(id, initialBalance);
         cards.put(id, card);
 
         return card;

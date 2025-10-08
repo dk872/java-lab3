@@ -96,26 +96,26 @@ class SystemTest {
 
     @Test
     void accumulatedCardPassesWithBalance() {
-        AccumulatedCard card = registry.issueAccumulatedCard(50, turnstile);
+        AccumulatedCard card = registry.issueAccumulatedCard(50);
         assertTrue(turnstile.payTrip(card));
     }
 
     @Test
     void accumulatedCardFailsWithoutBalance() {
-        AccumulatedCard card = registry.issueAccumulatedCard(5, turnstile);
+        AccumulatedCard card = registry.issueAccumulatedCard(5);
         assertFalse(turnstile.payTrip(card));
     }
 
     @Test
     void accumulatedCardDecreasesBalance() {
-        AccumulatedCard card = registry.issueAccumulatedCard(30, turnstile);
+        AccumulatedCard card = registry.issueAccumulatedCard(30);
         assertTrue(turnstile.payTrip(card));
         assertEquals(20, card.getBalance(), 0.001);
     }
 
     @Test
     void accumulatedCardCanBeToppedUp() {
-        AccumulatedCard card = registry.issueAccumulatedCard(5, turnstile);
+        AccumulatedCard card = registry.issueAccumulatedCard(5);
         card.addBalance(50);
         assertEquals(55, card.getBalance(), 0.001);
     }
@@ -123,7 +123,7 @@ class SystemTest {
     @Test
     void negativeBalanceThrowsException() {
         assertThrows(IllegalArgumentException.class,
-                () -> registry.issueAccumulatedCard(-10.0, turnstile));
+                () -> registry.issueAccumulatedCard(-10.0));
     }
 
     @Test
@@ -209,7 +209,7 @@ class SystemTest {
     void statisticsShouldCountByType() {
         Card student = registry.issueTripsCard("student", "10 days", 5, LocalDate.now());
         Card regular = registry.issueTripsCard("regular", "10 days", 5, LocalDate.now());
-        AccumulatedCard accumulated = registry.issueAccumulatedCard(5.0, turnstile);
+        AccumulatedCard accumulated = registry.issueAccumulatedCard(5.0);
 
         turnstile.payTrip(student);
         turnstile.payTrip(student);
