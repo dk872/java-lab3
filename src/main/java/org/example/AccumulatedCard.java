@@ -23,9 +23,10 @@ class AccumulatedCard extends Card {
     }
 
     @Override
-    public void useTrip(double tripCost) {
-        if (!canPass(tripCost)) return;
+    public boolean useTrip(double tripCost) {
+        if (!canPass(tripCost)) return false;
         balance -= tripCost;
+        return true;
     }
 
     @Override

@@ -14,7 +14,7 @@ abstract class Card {
 
     public abstract boolean isValid();
     public abstract boolean canPass(double tripCost);
-    public abstract void useTrip(double tripCost);
+    public abstract boolean useTrip(double tripCost);
     public abstract boolean addTrips(int count);
     public abstract int getCountOfTrips();
 }
